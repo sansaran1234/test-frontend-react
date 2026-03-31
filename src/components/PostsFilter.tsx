@@ -18,13 +18,13 @@ interface PostsFilterProps {
   setUserFilter: (value: string) => void
 }
 
-export function PostsFilter({
+export const PostsFilter = ({
   globalFilter,
   setGlobalFilter,
   isFiltering,
   userFilter,
   setUserFilter,
-}: PostsFilterProps) {
+}: PostsFilterProps) => {
   const { t } = useTranslation()
   const { data: users } = useGetUsers()
 

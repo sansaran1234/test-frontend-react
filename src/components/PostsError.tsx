@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-export function PostsError() {
+export const PostsError = () => {
   const { t } = useTranslation()
   return (
     <div className="rounded-md border border-destructive/50 bg-destructive/10 p-6 text-center">

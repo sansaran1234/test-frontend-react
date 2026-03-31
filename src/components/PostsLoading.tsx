@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export function PostsLoading() {
+export const PostsLoading = () => {
   return (
     <div className="space-y-3">
       {Array.from({ length: 8 }).map((_, i) => (

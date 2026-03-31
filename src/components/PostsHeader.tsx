@@ -4,7 +4,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
-export function PostsHeader() {
+export const PostsHeader = () => {
   const { t } = useTranslation()
   return (
     <div className="flex items-center justify-between">

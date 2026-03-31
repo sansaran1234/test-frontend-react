@@ -29,13 +29,13 @@ interface PostFormProps {
   submitLabel?: string
 }
 
-export function PostForm({
+export const PostForm = ({
   defaultValues,
   onSubmit,
   onCancel,
   isLoading,
   submitLabel = 'Save',
-}: PostFormProps) {
+}: PostFormProps) => {
   const {
     register,
     handleSubmit,

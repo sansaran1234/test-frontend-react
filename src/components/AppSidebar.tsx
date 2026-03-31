@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-export function AppSidebar() {
+export const AppSidebar = () => {
   const { t } = useTranslation()
 
   return (

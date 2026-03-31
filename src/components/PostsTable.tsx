@@ -42,7 +42,7 @@ interface PostsTableProps {
   isDeleting?: boolean
 }
 
-export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
+export const PostsTable = ({ data, onDelete, isDeleting }: PostsTableProps) => {
   const { t } = useTranslation()
   const { data: users } = useGetUsers()
   const [globalFilterInput, setGlobalFilterInput] = useState('')
