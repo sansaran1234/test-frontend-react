@@ -7,17 +7,20 @@ import { toast } from 'sonner'
 import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { usePostStore } from '@/store/usePostStore'
 
 
 const PostCreatePage = () => {
   const navigate = useNavigate()
   const { mutate: createPost, isPending } = useCreatePost()
+  const addPost = usePostStore((state) => state.addPost)
 
   const handleSubmit = (values: PostFormValues) => {
     createPost(
       { ...values, userId: 1 },
       {
         onSuccess: (created) => {
+          addPost(created)
           toast.success(`Post created successfully (ID: ${created.id})`)
           navigate({ to: '/posts' })
         },

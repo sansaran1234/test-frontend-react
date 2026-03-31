@@ -55,13 +55,19 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
 
   const columns: ColumnDef<Post>[] = [
     {
-      accessorKey: 'id',
+      id: 'index',
       header: t('posts.id'),
-      cell: ({ row }) => (
-        <Badge variant="outline" className="font-mono text-xs">
-          #{row.getValue('id')}
-        </Badge>
-      ),
+      cell: ({ row, table }) => {
+        const { pageIndex, pageSize } = table.getState().pagination
+        const rowIndex = table.getRowModel().rows.indexOf(row)
+        const sequenceNumber = pageIndex * pageSize + rowIndex + 1
+
+        return (
+          <Badge variant="outline" className="font-mono text-xs">
+            {sequenceNumber}
+          </Badge>
+        )
+      },
       size: 60,
     },
     {
