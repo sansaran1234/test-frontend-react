@@ -27,40 +27,40 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Link } from '@tanstack/react-router'
-import { Pencil, Trash2 } from 'lucide-react'
+import { MessageSquareText, Pencil, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
-import type { User } from '@/api/users'
+import type { Comment } from '@/api/comments'
 import { useDebounce } from '@/hooks/useDebounce'
-import { UsersFilter } from '@/components/UsersFilter'
+import { CommentsFilter } from '@/components/CommentsFilter'
 import { TablePagination } from '@/components/TablePagination'
 
-interface UsersTableProps {
-  data: User[]
+interface CommentsTableProps {
+  data: Comment[]
   onDelete: (id: number) => void
   isDeleting?: boolean
 }
 
-export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
+export const CommentsTable = ({ data, onDelete, isDeleting }: CommentsTableProps) => {
   const { t } = useTranslation()
   const [globalFilterInput, setGlobalFilterInput] = useState('')
   const globalFilter = useDebounce(globalFilterInput, 300)
   const isFiltering = globalFilterInput !== globalFilter
   const [deletingId, setDeletingId] = useState<number | null>(null)
-  const [userToDelete, setUserToDelete] = useState<number | null>(null)
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null)
 
   const handleConfirmDelete = () => {
-    if (userToDelete !== null) {
-      setDeletingId(userToDelete)
-      onDelete(userToDelete)
-      setUserToDelete(null)
+    if (commentToDelete !== null) {
+      setDeletingId(commentToDelete)
+      onDelete(commentToDelete)
+      setCommentToDelete(null)
     }
   }
 
-  const columns = React.useMemo<ColumnDef<User>[]>(() => [
+  const columns = React.useMemo<ColumnDef<Comment>[]>(() => [
     {
       id: 'index',
-      header: t('users.index', 'ลำดับ'),
+      header: t('comments.index', 'ลำดับ'),
       cell: ({ row, table }) => {
         const { pageIndex, pageSize } = table.getState().pagination
         const rowIndex = table.getRowModel().rows.indexOf(row)
@@ -76,24 +76,38 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
       enableGlobalFilter: false,
     },
     {
+      accessorKey: 'postId',
+      header: t('comments.postId', 'Post'),
+      cell: ({ row }) => (
+        <Badge variant="secondary" className="font-mono text-xs">
+          #{row.getValue('postId')}
+        </Badge>
+      ),
+      size: 80,
+    },
+    {
       accessorKey: 'name',
-      header: t('users.name', 'Name'),
-      cell: ({ row }) => <span className="font-medium text-sm">{row.getValue('name')}</span>,
+      header: t('comments.name', 'Name'),
+      cell: ({ row }) => (
+        <div className="max-w-[260px]">
+          <p className="truncate font-medium text-sm">{row.getValue('name')}</p>
+        </div>
+      ),
     },
     {
       accessorKey: 'email',
-      header: t('users.email', 'Email'),
+      header: t('comments.email', 'Email'),
       cell: ({ row }) => <span className="text-sm">{row.getValue('email')}</span>,
     },
     {
-      accessorKey: 'phone',
-      header: t('users.phone', 'Phone'),
-      cell: ({ row }) => <span className="text-sm">{(row.getValue('phone') as string) ?? '-'}</span>,
-    },
-    {
-      accessorKey: 'website',
-      header: t('users.website', 'Website'),
-      cell: ({ row }) => <span className="text-sm">{(row.getValue('website') as string) ?? '-'}</span>,
+      accessorKey: 'body',
+      header: t('comments.body', 'Body'),
+      cell: ({ row }) => (
+        <div className="max-w-[520px] flex items-start gap-2">
+          <MessageSquareText className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+          <p className="truncate text-sm text-muted-foreground">{row.getValue('body')}</p>
+        </div>
+      ),
     },
     {
       id: 'actions',
@@ -103,21 +117,23 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
         return (
           <div className="flex items-center gap-2 justify-end">
             <Link
-              to="/users/$userId"
-              params={{ userId: String(id) }}
+              to="/comments/$commentId"
+              params={{ commentId: String(id) }}
               className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
             >
               <Pencil className="h-3.5 w-3.5 mr-1" />
-              {t('users.edit', 'Edit')}
+              {t('comments.edit', 'Edit')}
             </Link>
             <Button
               variant="destructive"
               size="sm"
               disabled={isDeleting && deletingId === id}
-              onClick={() => setUserToDelete(id)}
+              onClick={() => setCommentToDelete(id)}
             >
               <Trash2 className="h-3.5 w-3.5 mr-1" />
-              {isDeleting && deletingId === id ? t('users.deleting', 'Deleting...') : t('users.delete', 'Delete')}
+              {isDeleting && deletingId === id
+                ? t('comments.deleting', 'Deleting...')
+                : t('comments.delete', 'Delete')}
             </Button>
           </div>
         )
@@ -142,7 +158,7 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
 
   return (
     <div className="space-y-4">
-      <UsersFilter
+      <CommentsFilter
         globalFilter={globalFilterInput}
         setGlobalFilter={(value) => setGlobalFilterInput(value)}
         isFiltering={isFiltering}
@@ -177,7 +193,7 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                  {t('users.noUsers', 'No users found.')}
+                  {t('comments.noComments', 'No comments found.')}
                 </TableCell>
               </TableRow>
             )}
@@ -186,7 +202,7 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
       </div>
 
       <TablePagination
-        info={t('users.pageInfo', {
+        info={t('comments.pageInfo', {
           page: table.getState().pagination.pageIndex + 1,
           pageCount: table.getPageCount(),
           count: table.getFilteredRowModel().rows.length,
@@ -200,33 +216,33 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
         onPrevious={() => table.previousPage()}
         onNext={() => table.nextPage()}
         onPageIndex={(idx) => table.setPageIndex(idx)}
-        previousLabel={t('users.previous', 'Previous')}
-        nextLabel={t('users.next', 'Next')}
+        previousLabel={t('comments.previous', 'Previous')}
+        nextLabel={t('comments.next', 'Next')}
       />
 
-      <Dialog open={userToDelete !== null} onOpenChange={(open) => !open && setUserToDelete(null)}>
+      <Dialog open={commentToDelete !== null} onOpenChange={(open) => !open && setCommentToDelete(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('users.deleteTitle', 'Delete User')}</DialogTitle>
+            <DialogTitle>{t('comments.deleteTitle', 'Delete Comment')}</DialogTitle>
             <DialogDescription>
-              {t('users.deleteConfirm', {
-                id: userToDelete ?? '',
-                defaultValue: 'Are you sure you want to delete user #{{id}}? This action cannot be undone.',
+              {t('comments.deleteConfirm', {
+                id: commentToDelete ?? '',
+                defaultValue: 'Are you sure you want to delete comment #{{id}}? This action cannot be undone.',
               })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setUserToDelete(null)}>
-              {t('users.cancel', 'Cancel')}
+            <Button variant="outline" onClick={() => setCommentToDelete(null)}>
+              {t('comments.cancel', 'Cancel')}
             </Button>
             <Button
               variant="destructive"
               onClick={handleConfirmDelete}
-              disabled={userToDelete !== null && isDeleting && deletingId === userToDelete}
+              disabled={commentToDelete !== null && isDeleting && deletingId === commentToDelete}
             >
-              {userToDelete !== null && isDeleting && deletingId === userToDelete
-                ? t('users.deleting', 'Deleting...')
-                : t('users.delete', 'Delete')}
+              {commentToDelete !== null && isDeleting && deletingId === commentToDelete
+                ? t('comments.deleting', 'Deleting...')
+                : t('comments.delete', 'Delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

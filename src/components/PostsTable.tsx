@@ -69,7 +69,7 @@ export const PostsTable = ({ data, onDelete, isDeleting }: PostsTableProps) => {
   const columns = React.useMemo<ColumnDef<Post>[]>(() => [
     {
       id: 'index',
-      header: t('posts.id'),
+      header: t('posts.index', 'ลำดับ'),
       cell: ({ row, table }) => {
         const { pageIndex, pageSize } = table.getState().pagination
         const rowIndex = table.getRowModel().rows.indexOf(row)

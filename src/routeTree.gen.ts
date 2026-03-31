@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as PostsIndexRouteImport } from './routes/posts/index'
+import { Route as CommentsIndexRouteImport } from './routes/comments/index'
 import { Route as UsersCreateRouteImport } from './routes/users/create'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
 import { Route as PostsCreateRouteImport } from './routes/posts/create'
 import { Route as PostsPostIdRouteImport } from './routes/posts/$postId'
+import { Route as CommentsCreateRouteImport } from './routes/comments/create'
+import { Route as CommentsCommentIdRouteImport } from './routes/comments/$commentId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +33,11 @@ const UsersIndexRoute = UsersIndexRouteImport.update({
 const PostsIndexRoute = PostsIndexRouteImport.update({
   id: '/posts/',
   path: '/posts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentsIndexRoute = CommentsIndexRouteImport.update({
+  id: '/comments/',
+  path: '/comments/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersCreateRoute = UsersCreateRouteImport.update({
@@ -52,32 +60,51 @@ const PostsPostIdRoute = PostsPostIdRouteImport.update({
   path: '/posts/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommentsCreateRoute = CommentsCreateRouteImport.update({
+  id: '/comments/create',
+  path: '/comments/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentsCommentIdRoute = CommentsCommentIdRouteImport.update({
+  id: '/comments/$commentId',
+  path: '/comments/$commentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comments/$commentId': typeof CommentsCommentIdRoute
+  '/comments/create': typeof CommentsCreateRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts/create': typeof PostsCreateRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/create': typeof UsersCreateRoute
+  '/comments/': typeof CommentsIndexRoute
   '/posts/': typeof PostsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comments/$commentId': typeof CommentsCommentIdRoute
+  '/comments/create': typeof CommentsCreateRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts/create': typeof PostsCreateRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/create': typeof UsersCreateRoute
+  '/comments': typeof CommentsIndexRoute
   '/posts': typeof PostsIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comments/$commentId': typeof CommentsCommentIdRoute
+  '/comments/create': typeof CommentsCreateRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts/create': typeof PostsCreateRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/create': typeof UsersCreateRoute
+  '/comments/': typeof CommentsIndexRoute
   '/posts/': typeof PostsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
@@ -85,38 +112,50 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/comments/$commentId'
+    | '/comments/create'
     | '/posts/$postId'
     | '/posts/create'
     | '/users/$userId'
     | '/users/create'
+    | '/comments/'
     | '/posts/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/comments/$commentId'
+    | '/comments/create'
     | '/posts/$postId'
     | '/posts/create'
     | '/users/$userId'
     | '/users/create'
+    | '/comments'
     | '/posts'
     | '/users'
   id:
     | '__root__'
     | '/'
+    | '/comments/$commentId'
+    | '/comments/create'
     | '/posts/$postId'
     | '/posts/create'
     | '/users/$userId'
     | '/users/create'
+    | '/comments/'
     | '/posts/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommentsCommentIdRoute: typeof CommentsCommentIdRoute
+  CommentsCreateRoute: typeof CommentsCreateRoute
   PostsPostIdRoute: typeof PostsPostIdRoute
   PostsCreateRoute: typeof PostsCreateRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersCreateRoute: typeof UsersCreateRoute
+  CommentsIndexRoute: typeof CommentsIndexRoute
   PostsIndexRoute: typeof PostsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
@@ -142,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts/'
       preLoaderRoute: typeof PostsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comments/': {
+      id: '/comments/'
+      path: '/comments'
+      fullPath: '/comments/'
+      preLoaderRoute: typeof CommentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users/create': {
@@ -172,15 +218,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsPostIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comments/create': {
+      id: '/comments/create'
+      path: '/comments/create'
+      fullPath: '/comments/create'
+      preLoaderRoute: typeof CommentsCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comments/$commentId': {
+      id: '/comments/$commentId'
+      path: '/comments/$commentId'
+      fullPath: '/comments/$commentId'
+      preLoaderRoute: typeof CommentsCommentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommentsCommentIdRoute: CommentsCommentIdRoute,
+  CommentsCreateRoute: CommentsCreateRoute,
   PostsPostIdRoute: PostsPostIdRoute,
   PostsCreateRoute: PostsCreateRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersCreateRoute: UsersCreateRoute,
+  CommentsIndexRoute: CommentsIndexRoute,
   PostsIndexRoute: PostsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }

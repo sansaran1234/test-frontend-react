@@ -1,4 +1,4 @@
-import { FileText, Users } from "lucide-react"
+import { FileText, MessageSquare, Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "@tanstack/react-router"
 
@@ -48,6 +48,17 @@ export const AppSidebar = () => {
                     <Link to="/users" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
                       <Users />
                       <span>{t("root.navUsers")}</span>
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip={t("root.navComments")}
+                  render={
+                    <Link to="/comments" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
+                      <MessageSquare />
+                      <span>{t("root.navComments")}</span>
                     </Link>
                   }
                 />
