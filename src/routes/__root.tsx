@@ -2,12 +2,15 @@
 import { Outlet, createRootRoute, Link } from '@tanstack/react-router'
 import { Toaster } from '@/components/ui/sonner'
 import { FileText } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 export const Route = createRootRoute({
   component: RootLayout,
 })
 
 function RootLayout() {
+  const { t } = useTranslation()
   return (
     <div className="min-h-screen bg-background font-sans antialiased">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -17,15 +20,16 @@ function RootLayout() {
             className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors"
           >
             <FileText className="h-5 w-5" />
-            <span>Posts Manager</span>
+            <span>{t('root.title')}</span>
           </Link>
           <nav className="flex items-center gap-4 ml-auto">
             <Link
               to="/posts"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground [&.active]:font-medium"
             >
-              Posts
+              {t('root.navPosts')}
             </Link>
+            <LanguageSwitcher />
           </nav>
         </div>
       </header>

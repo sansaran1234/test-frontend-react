@@ -31,6 +31,7 @@ import { Link } from '@tanstack/react-router'
 import type { Post } from '@/api/posts'
 import { Pencil, Trash2, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 interface PostsTableProps {
   data: Post[]
@@ -39,6 +40,7 @@ interface PostsTableProps {
 }
 
 export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
+  const { t } = useTranslation()
   const [globalFilter, setGlobalFilter] = useState('')
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [postToDelete, setPostToDelete] = useState<number | null>(null)
@@ -54,7 +56,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
   const columns: ColumnDef<Post>[] = [
     {
       accessorKey: 'id',
-      header: 'ID',
+      header: t('posts.id'),
       cell: ({ row }) => (
         <Badge variant="outline" className="font-mono text-xs">
           #{row.getValue('id')}
@@ -64,15 +66,15 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
     },
     {
       accessorKey: 'userId',
-      header: 'User',
+      header: t('posts.user'),
       cell: ({ row }) => (
-        <span className="text-sm text-muted-foreground">User {row.getValue('userId')}</span>
+        <span className="text-sm text-muted-foreground">{t('posts.user')} {row.getValue('userId')}</span>
       ),
       size: 80,
     },
     {
       accessorKey: 'title',
-      header: 'Title',
+      header: t('posts.postTitle'),
       cell: ({ row }) => (
         <div className="max-w-[420px]">
           <p className="truncate font-medium text-sm">{row.getValue('title')}</p>
@@ -92,7 +94,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
               className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
             >
               <Pencil className="h-3.5 w-3.5 mr-1" />
-              Edit
+              {t('posts.edit')}
             </Link>
             <Button
               variant="destructive"
@@ -101,7 +103,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
               onClick={() => setPostToDelete(id)}
             >
               <Trash2 className="h-3.5 w-3.5 mr-1" />
-              {isDeleting && deletingId === id ? 'Deleting...' : 'Delete'}
+              {isDeleting && deletingId === id ? t('posts.deleting') : t('posts.delete')}
             </Button>
           </div>
         )
@@ -127,7 +129,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search posts..."
+          placeholder={t('posts.searchPlaceholder')}
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           className="pl-9"
@@ -164,7 +166,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                  No posts found.
+                  {t('posts.noPosts')}
                 </TableCell>
               </TableRow>
             )}
@@ -175,9 +177,12 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()} &middot;{' '}
-          {table.getFilteredRowModel().rows.length} result
-          {table.getFilteredRowModel().rows.length !== 1 ? 's' : ''}
+          {t('posts.pageInfo', {
+            page: table.getState().pagination.pageIndex + 1,
+            pageCount: table.getPageCount(),
+            count: table.getFilteredRowModel().rows.length,
+            suffix: table.getFilteredRowModel().rows.length !== 1 ? 's' : ''
+          })}
         </p>
         <div className="flex items-center gap-2">
           <Button
@@ -187,7 +192,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
             disabled={!table.getCanPreviousPage()}
           >
             <ChevronLeft className="h-4 w-4" />
-            Previous
+            {t('posts.previous')}
           </Button>
           <Button
             variant="outline"
@@ -195,7 +200,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            {t('posts.next')}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
@@ -204,17 +209,17 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
       <Dialog open={postToDelete !== null} onOpenChange={(open) => !open && setPostToDelete(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Post</DialogTitle>
+            <DialogTitle>{t('posts.deleteTitle')}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete post #{postToDelete}? This action cannot be undone.
+              {t('posts.deleteConfirm', { id: postToDelete })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setPostToDelete(null)}>
-              Cancel
+              {t('posts.cancel')}
             </Button>
             <Button variant="destructive" onClick={handleConfirmDelete}>
-              Delete
+              {t('posts.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>
