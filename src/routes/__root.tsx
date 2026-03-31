@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { ModeToggle } from '@/components/ModeToggle'
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -22,7 +23,7 @@ function RootLayout() {
             <FileText className="h-5 w-5" />
             <span>{t('root.title')}</span>
           </Link>
-          <nav className="flex items-center gap-4 ml-auto">
+          <nav className="flex items-center gap-2 ml-auto">
             <Link
               to="/posts"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground [&.active]:font-medium"
@@ -30,6 +31,7 @@ function RootLayout() {
               {t('root.navPosts')}
             </Link>
             <LanguageSwitcher />
+            <ModeToggle />
           </nav>
         </div>
       </header>
