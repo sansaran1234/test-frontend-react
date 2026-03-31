@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Globe } from 'lucide-react'
@@ -18,18 +18,24 @@ export const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button variant="outline" size="sm" className="w-[80px] flex gap-2" />}
+        render={<Button variant="outline" size="sm" className="w-[70px] flex gap-2" />}
       >
         <Globe className="h-4 w-4" />
         {i18n.language === 'th' ? 'TH' : 'EN'}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+      <DropdownMenuContent align="end" className="w-[150px]">
+        <DropdownMenuCheckboxItem 
+          checked={i18n.language === 'en'} 
+          onCheckedChange={() => handleLanguageChange('en')}
+        >
           English (EN)
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('th')}>
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem 
+          checked={i18n.language === 'th'} 
+          onCheckedChange={() => handleLanguageChange('th')}
+        >
           ภาษาไทย (TH)
-        </DropdownMenuItem>
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
