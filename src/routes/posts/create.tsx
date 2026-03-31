@@ -8,11 +8,8 @@ import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/posts/create')({
-  component: PostCreatePage,
-})
 
-function PostCreatePage() {
+const PostCreatePage = () => {
   const navigate = useNavigate()
   const { mutate: createPost, isPending } = useCreatePost()
 
@@ -57,3 +54,7 @@ function PostCreatePage() {
     </div>
   )
 }
+
+export const Route = createFileRoute('/posts/create')({
+  component: PostCreatePage,
+})

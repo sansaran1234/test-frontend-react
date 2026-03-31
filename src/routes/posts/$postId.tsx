@@ -10,11 +10,8 @@ import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/posts/$postId')({
-  component: PostDetailPage,
-})
 
-function PostDetailPage() {
+const PostDetailPage = () => {
   const { postId } = Route.useParams()
   const id = Number(postId)
   const navigate = useNavigate()
@@ -86,3 +83,7 @@ function PostDetailPage() {
     </div>
   )
 }
+
+export const Route = createFileRoute('/posts/$postId')({
+  component: PostDetailPage,
+})

@@ -8,11 +8,8 @@ import { Plus } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/posts/')({
-  component: PostsListPage,
-})
 
-function PostsListPage() {
+const PostsListPage = () => {
   const { data: posts, isLoading, isError } = useGetPosts()
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost()
 
@@ -57,3 +54,7 @@ function PostsListPage() {
     </div>
   )
 }
+
+export const Route = createFileRoute('/posts/')({
+  component: PostsListPage,
+})
