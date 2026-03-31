@@ -9,9 +9,11 @@ import { toast } from 'sonner'
 import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 
 const PostDetailPage = () => {
+  const { t } = useTranslation()
   const { postId } = Route.useParams()
   const id = Number(postId)
   const navigate = useNavigate()
@@ -21,8 +23,8 @@ const PostDetailPage = () => {
 
   const handleSubmit = (values: PostFormValues) => {
     updatePost(values, {
-      onSuccess: () => toast.success('Post updated successfully'),
-      onError: () => toast.error('Failed to update post. Please try again.'),
+      onSuccess: () => toast.success(t('posts.updateSuccess')),
+      onError: () => toast.error(t('posts.updateError')),
     })
   }
 
@@ -31,18 +33,18 @@ const PostDetailPage = () => {
       <div>
         <Link to="/posts" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
           <ArrowLeft className="h-4 w-4 mr-1" />
-          Back to Posts
+          {t('posts.backToPosts')}
         </Link>
       </div>
 
       {isError ? (
         <div className="rounded-md border border-destructive/50 bg-destructive/10 p-6 text-center">
-          <p className="text-destructive font-medium">Post not found.</p>
+          <p className="text-destructive font-medium">{t('posts.notFound')}</p>
           <p className="text-sm text-muted-foreground mt-1">
-            The post you're looking for doesn't exist or has been deleted.
+            {t('posts.notFoundDesc')}
           </p>
           <Link to="/posts" className={cn(buttonVariants({ variant: 'outline' }), 'mt-4')}>
-            Back to Posts
+            {t('posts.backToPosts')}
           </Link>
         </div>
       ) : (
@@ -50,8 +52,8 @@ const PostDetailPage = () => {
           <CardHeader>
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
-                <CardTitle className="text-2xl">Edit Post</CardTitle>
-                <CardDescription>Update the post details below.</CardDescription>
+                <CardTitle className="text-2xl">{t('posts.editTitle')}</CardTitle>
+                <CardDescription>{t('posts.editDesc')}</CardDescription>
               </div>
               <Badge variant="outline" className="font-mono text-xs shrink-0">
                 #{postId}
@@ -74,7 +76,7 @@ const PostDetailPage = () => {
                 onSubmit={handleSubmit}
                 onCancel={() => navigate({ to: '/posts' })}
                 isLoading={isPending}
-                submitLabel="Save Changes"
+                submitLabel={t('posts.saveChanges')}
               />
             )}
           </CardContent>

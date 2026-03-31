@@ -14,7 +14,13 @@ const resources = {
         title: "Posts",
         subtitle: "Manage and browse all blog posts",
         createBtn: "Create Post",
+        createTitle: "Create New Post",
+        createDesc: "Fill in the details below to publish a new blog post.",
+        backToPosts: "Back to Posts",
         searchPlaceholder: "Search posts...",
+        save: "Save",
+        saving: "Saving...",
+        reset: "Reset",
         id: "ID",
         index: "No.",
         user: "User",
@@ -32,7 +38,30 @@ const resources = {
         failLoad: "Failed to load posts.",
         checkConnection: "Please check your connection and try again.",
         deleteSuccess: "Post #{{id}} deleted successfully",
-        deleteError: "Failed to delete post. Please try again."
+        deleteError: "Failed to delete post. Please try again.",
+        createSuccess: "Post created successfully (ID: {{id}})",
+        createError: "Failed to create post. Please try again.",
+        updateSuccess: "Post updated successfully",
+        updateError: "Failed to update post. Please try again.",
+        saveChanges: "Save Changes",
+        editTitle: "Edit Post",
+        editDesc: "Update the post details below.",
+        notFound: "Post not found.",
+        notFoundDesc: "The post you're looking for doesn't exist or has been deleted.",
+        form: {
+          titleLabel: "Title",
+          titlePlaceholder: "Enter post title...",
+          bodyLabel: "Content",
+          bodyPlaceholder: "Write your post content here..."
+        },
+        validation: {
+          titleRequired: "Please enter a title",
+          titleMin: "Title must be at least 3 characters",
+          titleMax: "Title must be at most 200 characters",
+          bodyRequired: "Please enter content",
+          bodyMin: "Content must be at least 10 characters",
+          bodyMax: "Content must be at most 2000 characters"
+        }
       },
       users: {
         title: "Users",
@@ -63,6 +92,9 @@ const resources = {
         createError: "Failed to create user. Please try again.",
         updateSuccess: "User updated successfully",
         updateError: "Failed to update user. Please try again.",
+        save: "Save",
+        saving: "Saving...",
+        reset: "Reset",
         backToUsers: "Back to Users",
         createTitle: "Create New User",
         createDesc: "Fill in the details below to create a new user.",
@@ -70,7 +102,30 @@ const resources = {
         editDesc: "Update the user details below.",
         saveChanges: "Save Changes",
         notFound: "User not found.",
-        notFoundDesc: "The user you're looking for doesn't exist or has been deleted."
+        notFoundDesc: "The user you're looking for doesn't exist or has been deleted.",
+        form: {
+          nameLabel: "Name",
+          namePlaceholder: "Enter name...",
+          usernameLabel: "Username",
+          usernamePlaceholder: "Enter username...",
+          emailLabel: "Email",
+          emailPlaceholder: "Enter email...",
+          phoneLabel: "Phone",
+          phonePlaceholder: "Enter phone number...",
+          websiteLabel: "Website",
+          websitePlaceholder: "Enter website..."
+        },
+        validation: {
+          nameRequired: "Please enter a name",
+          nameMin: "Name must be at least 2 characters",
+          nameMax: "Name must be at most 100 characters",
+          usernameRequired: "Please enter a username",
+          usernameMin: "Username must be at least 2 characters",
+          usernameMax: "Username must be at most 50 characters",
+          emailRequired: "Please enter an email",
+          emailFormat: "Invalid email format",
+          phoneNumbersOnly: "Phone must contain only numbers"
+        }
       },
       comments: {
         title: "Comments",
@@ -101,6 +156,9 @@ const resources = {
         createError: "Failed to create comment. Please try again.",
         updateSuccess: "Comment updated successfully",
         updateError: "Failed to update comment. Please try again.",
+        save: "Save",
+        saving: "Saving...",
+        reset: "Reset",
         backToComments: "Back to Comments",
         createTitle: "Create New Comment",
         createDesc: "Fill in the details below to create a new comment.",
@@ -109,6 +167,16 @@ const resources = {
         saveChanges: "Save Changes",
         notFound: "Comment not found.",
         notFoundDesc: "The comment you're looking for doesn't exist or has been deleted.",
+        form: {
+          postIdLabel: "Post ID",
+          postIdPlaceholder: "Enter post id...",
+          nameLabel: "Name",
+          namePlaceholder: "Enter name...",
+          emailLabel: "Email",
+          emailPlaceholder: "Enter email...",
+          bodyLabel: "Body",
+          bodyPlaceholder: "Write comment here..."
+        },
         validation: {
           postIdRequired: "Please enter a Post ID",
           postIdInvalid: "Post ID must be a number",
@@ -141,7 +209,13 @@ const resources = {
         title: "โพสต์",
         subtitle: "จัดการและเรียกดูโพสต์บล็อกทั้งหมด",
         createBtn: "สร้างโพสต์",
+        createTitle: "สร้างโพสต์ใหม่",
+        createDesc: "กรอกรายละเอียดด้านล่างเพื่อเผยแพร่โพสต์ใหม่",
+        backToPosts: "กลับไปหน้าโพสต์",
         searchPlaceholder: "ค้นหาโพสต์...",
+        save: "บันทึก",
+        saving: "กำลังบันทึก...",
+        reset: "รีเซ็ต",
         id: "รหัส",
         index: "ลำดับ",
         user: "ผู้ใช้",
@@ -159,7 +233,30 @@ const resources = {
         failLoad: "ไม่สามารถโหลดโพสต์ได้",
         checkConnection: "โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง",
         deleteSuccess: "ลบโพสต์ #{{id}} สำเร็จแล้ว",
-        deleteError: "ไม่สามารถลบโพสต์ได้ โปรดลองอีกครั้ง"
+        deleteError: "ไม่สามารถลบโพสต์ได้ โปรดลองอีกครั้ง",
+        createSuccess: "สร้างโพสต์สำเร็จ (รหัส: {{id}})",
+        createError: "ไม่สามารถสร้างโพสต์ได้ โปรดลองอีกครั้ง",
+        updateSuccess: "อัปเดตโพสต์สำเร็จแล้ว",
+        updateError: "ไม่สามารถอัปเดตโพสต์ได้ โปรดลองอีกครั้ง",
+        saveChanges: "บันทึกการเปลี่ยนแปลง",
+        editTitle: "แก้ไขโพสต์",
+        editDesc: "อัปเดตรายละเอียดโพสต์ด้านล่าง",
+        notFound: "ไม่พบโพสต์",
+        notFoundDesc: "โพสต์ที่คุณกำลังค้นหาไม่มีอยู่หรือถูกลบไปแล้ว",
+        form: {
+          titleLabel: "หัวข้อ",
+          titlePlaceholder: "กรอกหัวข้อโพสต์...",
+          bodyLabel: "เนื้อหา",
+          bodyPlaceholder: "เขียนเนื้อหาโพสต์ที่นี่..."
+        },
+        validation: {
+          titleRequired: "กรุณากรอกหัวข้อ",
+          titleMin: "หัวข้อต้องมีอย่างน้อย 3 ตัวอักษร",
+          titleMax: "หัวข้อต้องไม่เกิน 200 ตัวอักษร",
+          bodyRequired: "กรุณากรอกเนื้อหา",
+          bodyMin: "เนื้อหาต้องมีอย่างน้อย 10 ตัวอักษร",
+          bodyMax: "เนื้อหาต้องไม่เกิน 2000 ตัวอักษร"
+        }
       },
       users: {
         title: "ผู้ใช้",
@@ -190,6 +287,9 @@ const resources = {
         createError: "ไม่สามารถสร้างผู้ใช้ได้ โปรดลองอีกครั้ง",
         updateSuccess: "อัปเดตผู้ใช้สำเร็จแล้ว",
         updateError: "ไม่สามารถอัปเดตผู้ใช้ได้ โปรดลองอีกครั้ง",
+        save: "บันทึก",
+        saving: "กำลังบันทึก...",
+        reset: "รีเซ็ต",
         backToUsers: "กลับไปหน้าผู้ใช้",
         createTitle: "สร้างผู้ใช้ใหม่",
         createDesc: "กรอกรายละเอียดด้านล่างเพื่อสร้างผู้ใช้ใหม่",
@@ -197,7 +297,30 @@ const resources = {
         editDesc: "อัปเดตรายละเอียดผู้ใช้ด้านล่าง",
         saveChanges: "บันทึกการเปลี่ยนแปลง",
         notFound: "ไม่พบผู้ใช้",
-        notFoundDesc: "ผู้ใช้ที่คุณกำลังค้นหาไม่มีอยู่หรือถูกลบไปแล้ว"
+        notFoundDesc: "ผู้ใช้ที่คุณกำลังค้นหาไม่มีอยู่หรือถูกลบไปแล้ว",
+        form: {
+          nameLabel: "ชื่อ",
+          namePlaceholder: "กรอกชื่อ...",
+          usernameLabel: "ชื่อผู้ใช้",
+          usernamePlaceholder: "กรอกชื่อผู้ใช้...",
+          emailLabel: "อีเมล",
+          emailPlaceholder: "กรอกอีเมล...",
+          phoneLabel: "โทรศัพท์",
+          phonePlaceholder: "กรอกเบอร์โทร...",
+          websiteLabel: "เว็บไซต์",
+          websitePlaceholder: "กรอกเว็บไซต์..."
+        },
+        validation: {
+          nameRequired: "กรุณากรอกชื่อ",
+          nameMin: "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร",
+          nameMax: "ชื่อต้องไม่เกิน 100 ตัวอักษร",
+          usernameRequired: "กรุณากรอกชื่อผู้ใช้",
+          usernameMin: "ชื่อผู้ใช้ต้องมีอย่างน้อย 2 ตัวอักษร",
+          usernameMax: "ชื่อผู้ใช้ต้องไม่เกิน 50 ตัวอักษร",
+          emailRequired: "กรุณากรอกอีเมล",
+          emailFormat: "รูปแบบอีเมลไม่ถูกต้อง",
+          phoneNumbersOnly: "เบอร์โทรต้องเป็นตัวเลขเท่านั้น"
+        }
       },
       comments: {
         title: "ความคิดเห็น",
@@ -228,6 +351,9 @@ const resources = {
         createError: "ไม่สามารถสร้างความคิดเห็นได้ โปรดลองอีกครั้ง",
         updateSuccess: "อัปเดตความคิดเห็นสำเร็จแล้ว",
         updateError: "ไม่สามารถอัปเดตความคิดเห็นได้ โปรดลองอีกครั้ง",
+        save: "บันทึก",
+        saving: "กำลังบันทึก...",
+        reset: "รีเซ็ต",
         backToComments: "กลับไปหน้าความคิดเห็น",
         createTitle: "สร้างความคิดเห็นใหม่",
         createDesc: "กรอกรายละเอียดด้านล่างเพื่อสร้างความคิดเห็นใหม่",
@@ -236,6 +362,16 @@ const resources = {
         saveChanges: "บันทึกการเปลี่ยนแปลง",
         notFound: "ไม่พบความคิดเห็น",
         notFoundDesc: "ความคิดเห็นที่คุณกำลังค้นหาไม่มีอยู่หรือถูกลบไปแล้ว",
+        form: {
+          postIdLabel: "รหัสโพสต์",
+          postIdPlaceholder: "กรอกรหัสโพสต์...",
+          nameLabel: "ชื่อ",
+          namePlaceholder: "กรอกชื่อ...",
+          emailLabel: "อีเมล",
+          emailPlaceholder: "กรอกอีเมล...",
+          bodyLabel: "เนื้อหา",
+          bodyPlaceholder: "เขียนความคิดเห็นที่นี่..."
+        },
         validation: {
           postIdRequired: "กรุณาระบุ Post ID",
           postIdInvalid: "Post ID ต้องเป็นตัวเลข",
