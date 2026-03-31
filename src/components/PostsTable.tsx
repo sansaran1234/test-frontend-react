@@ -34,6 +34,7 @@ import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { useGetUsers } from '@/hooks/useUsers'
+import { useDebounce } from '@/hooks/useDebounce'
 
 interface PostsTableProps {
   data: Post[]
@@ -44,7 +45,9 @@ interface PostsTableProps {
 export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
   const { t } = useTranslation()
   const { data: users } = useGetUsers()
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [globalFilterInput, setGlobalFilterInput] = useState('')
+  const globalFilter = useDebounce(globalFilterInput, 1000)
+  const isFiltering = globalFilterInput !== globalFilter
   const [userFilter, setUserFilter] = useState('all')
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [postToDelete, setPostToDelete] = useState<number | null>(null)
@@ -146,7 +149,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
       globalFilter,
       columnFilters,
     },
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: setGlobalFilterInput,
     onColumnFiltersChange: () => {},
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -158,8 +161,9 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
     <div className="space-y-4">
       {/* Filters */}
       <PostsFilter
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
+        globalFilter={globalFilterInput}
+        setGlobalFilter={(value) => setGlobalFilterInput(value)}
+        isFiltering={isFiltering}
         userFilter={userFilter}
         setUserFilter={setUserFilter}
       />
