@@ -19,6 +19,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Link } from '@tanstack/react-router'
 import type { Post } from '@/api/posts'
 import { Pencil, Trash2, ChevronLeft, ChevronRight, Search } from 'lucide-react'
@@ -33,6 +41,15 @@ interface PostsTableProps {
 export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
   const [globalFilter, setGlobalFilter] = useState('')
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [postToDelete, setPostToDelete] = useState<number | null>(null)
+
+  const handleConfirmDelete = () => {
+    if (postToDelete !== null) {
+      setDeletingId(postToDelete)
+      onDelete(postToDelete)
+      setPostToDelete(null)
+    }
+  }
 
   const columns: ColumnDef<Post>[] = [
     {
@@ -81,12 +98,7 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
               variant="destructive"
               size="sm"
               disabled={isDeleting && deletingId === id}
-              onClick={() => {
-                if (confirm(`Delete post #${id}? This action cannot be undone.`)) {
-                  setDeletingId(id)
-                  onDelete(id)
-                }
-              }}
+              onClick={() => setPostToDelete(id)}
             >
               <Trash2 className="h-3.5 w-3.5 mr-1" />
               {isDeleting && deletingId === id ? 'Deleting...' : 'Delete'}
@@ -188,6 +200,25 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
           </Button>
         </div>
       </div>
+
+      <Dialog open={postToDelete !== null} onOpenChange={(open) => !open && setPostToDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Post</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete post #{postToDelete}? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPostToDelete(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

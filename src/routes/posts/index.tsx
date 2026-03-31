@@ -1,12 +1,10 @@
 // src/routes/posts/index.tsx
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useGetPosts, useDeletePost } from '@/hooks/usePosts'
 import { PostsTable } from '@/components/PostsTable'
+import { PostsHeader } from '@/components/PostsHeader'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
-import { Plus } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 
 const PostsListPage = () => {
@@ -22,17 +20,7 @@ const PostsListPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Posts</h1>
-          <p className="text-muted-foreground mt-1">Manage and browse all blog posts</p>
-        </div>
-        <Link to="/posts/create" className={cn(buttonVariants({ variant: 'default' }))}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Post
-        </Link>
-      </div>
+      <PostsHeader />
 
       {/* Content */}
       {isError ? (
