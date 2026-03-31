@@ -1,4 +1,4 @@
-// src/routes/posts/index.tsx
+import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useGetPosts, useDeletePost } from '@/hooks/usePosts'
 import { PostsTable } from '@/components/PostsTable'
@@ -26,7 +26,10 @@ const PostsListPage = () => {
     })
   }
 
-  const displayPosts = [...localPosts, ...(posts ?? [])]
+  const displayPosts = React.useMemo(
+    () => [...localPosts, ...(posts ?? [])],
+    [localPosts, posts]
+  )
 
   return (
     <div className="space-y-6">

@@ -1,4 +1,5 @@
 // src/components/PostsTable.tsx
+import * as React from 'react'
 import { useState } from 'react'
 import {
   flexRender,
@@ -16,9 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { PostsFilter } from '@/components/PostsFilter'
 import {
   Dialog,
   DialogContent,
@@ -29,9 +30,10 @@ import {
 } from '@/components/ui/dialog'
 import { Link } from '@tanstack/react-router'
 import type { Post } from '@/api/posts'
-import { Pencil, Trash2, ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
+import { useGetUsers } from '@/hooks/useUsers'
 
 interface PostsTableProps {
   data: Post[]
@@ -41,7 +43,9 @@ interface PostsTableProps {
 
 export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
   const { t } = useTranslation()
+  const { data: users } = useGetUsers()
   const [globalFilter, setGlobalFilter] = useState('')
+  const [userFilter, setUserFilter] = useState('all')
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [postToDelete, setPostToDelete] = useState<number | null>(null)
 
@@ -53,7 +57,12 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
     }
   }
 
-  const columns: ColumnDef<Post>[] = [
+  const columnFilters = React.useMemo(
+    () => (userFilter === 'all' ? [] : [{ id: 'userId', value: Number(userFilter) }]),
+    [userFilter]
+  )
+
+  const columns = React.useMemo<ColumnDef<Post>[]>(() => [
     {
       id: 'index',
       header: t('posts.id'),
@@ -69,14 +78,24 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
         )
       },
       size: 60,
+      enableGlobalFilter: false,
+      enableColumnFilter: false,
     },
     {
       accessorKey: 'userId',
       header: t('posts.user'),
-      cell: ({ row }) => (
-        <span className="text-sm text-muted-foreground">{t('posts.user')} {row.getValue('userId')}</span>
-      ),
+      cell: ({ row }) => {
+        const uid = row.getValue('userId') as number
+        const user = users?.find((u: any) => u.id === uid)
+
+        return (
+          <span className="text-sm text-foreground">
+            {user ? user.name : `${t('posts.user')} ${uid}`}
+          </span>
+        )
+      },
       size: 80,
+      filterFn: 'equals',
     },
     {
       accessorKey: 'title',
@@ -115,14 +134,20 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
         )
       },
       size: 160,
+      enableGlobalFilter: false,
+      enableColumnFilter: false,
     },
-  ]
+  ], [t, users, isDeleting, deletingId, onDelete])
 
   const table = useReactTable({
     data,
     columns,
-    state: { globalFilter },
+    state: {
+      globalFilter,
+      columnFilters,
+    },
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: () => {},
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -131,16 +156,13 @@ export function PostsTable({ data, onDelete, isDeleting }: PostsTableProps) {
 
   return (
     <div className="space-y-4">
-      {/* Search bar */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t('posts.searchPlaceholder')}
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          className="pl-9"
-        />
-      </div>
+      {/* Filters */}
+      <PostsFilter
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+        userFilter={userFilter}
+        setUserFilter={setUserFilter}
+      />
 
       {/* Table */}
       <div className="rounded-md border">
