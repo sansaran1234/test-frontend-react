@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react"
+import { FileText, Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "@tanstack/react-router"
 
@@ -31,12 +31,26 @@ export const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip={t("root.navPosts")}>
-                  <Link to="/posts" activeProps={{ className: "font-medium text-sidebar-accent-foreground flex gap-2 cursor-pointer" }}>
-                    <FileText />
-                    <span>{t("root.navPosts")}</span>
-                  </Link>
-                </SidebarMenuButton>
+                <SidebarMenuButton
+                  tooltip={t("root.navPosts")}
+                  render={
+                    <Link to="/posts" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
+                      <FileText />
+                      <span>{t("root.navPosts")}</span>
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip={t("root.navUsers")}
+                  render={
+                    <Link to="/users" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
+                      <Users />
+                      <span>{t("root.navUsers")}</span>
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

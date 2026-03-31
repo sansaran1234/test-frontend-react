@@ -3,10 +3,10 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { FormField } from '@/components/FormField'
 
 const postSchema = z.object({
   title: z
@@ -61,21 +61,16 @@ export const PostForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
+      <FormField id="title" label="Title" error={errors.title?.message}>
         <Input
           id="title"
           placeholder="Enter post title..."
           aria-invalid={!!errors.title}
           {...register('title')}
         />
-        {errors.title && (
-          <p className="text-sm font-medium text-destructive">{errors.title.message}</p>
-        )}
-      </div>
+      </FormField>
 
-      <div className="space-y-2">
-        <Label htmlFor="body">Content</Label>
+      <FormField id="body" label="Content" error={errors.body?.message}>
         <Textarea
           id="body"
           placeholder="Write your post content here..."
@@ -83,10 +78,7 @@ export const PostForm = ({
           aria-invalid={!!errors.body}
           {...register('body')}
         />
-        {errors.body && (
-          <p className="text-sm font-medium text-destructive">{errors.body.message}</p>
-        )}
-      </div>
+      </FormField>
 
       <div className="flex items-center gap-3 pt-2">
         <Button type="submit" disabled={isLoading}>
