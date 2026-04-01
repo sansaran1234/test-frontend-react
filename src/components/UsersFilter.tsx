@@ -16,7 +16,7 @@ export const UsersFilter = ({
   const { t } = useTranslation()
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
       <div className="relative max-w-sm flex-1 w-full">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -36,4 +36,3 @@ export const UsersFilter = ({
     </div>
   )
 }
-

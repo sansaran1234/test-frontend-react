@@ -29,8 +29,8 @@ export const PostsFilter = ({
   const { data: users } = useGetUsers()
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-      <div className="relative max-w-sm flex-1 w-full">
+    <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
+      <div className="relative max-w-none lg:max-w-sm flex-1 w-full">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder={t('posts.searchPlaceholder', 'Search...')}
@@ -47,7 +47,7 @@ export const PostsFilter = ({
         ) : null}
       </div>
       <Select value={userFilter} onValueChange={(val) => setUserFilter(val || 'all')}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full lg:w-[180px]">
           <SelectValue placeholder={t('posts.allUsers', 'All Users')}>
             {userFilter === 'all'
               ? t('posts.allUsers', 'All Users')
