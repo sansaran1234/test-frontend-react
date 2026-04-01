@@ -15,14 +15,14 @@ const PostCreatePage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { mutate: createPost, isPending } = useCreatePost()
-  const addPost = usePostStore((state) => state.addPost)
+  const upsertPost = usePostStore((state) => state.upsertPost)
 
   const handleSubmit = (values: PostFormValues) => {
     createPost(
       { ...values, userId: 1 },
       {
         onSuccess: (created) => {
-          addPost(created)
+          upsertPost(created)
           toast.success(t('posts.createSuccess', { id: created.id }))
           navigate({ to: '/posts' })
         },

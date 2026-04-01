@@ -15,22 +15,30 @@ const PostsListPage = () => {
   const { data: posts, isLoading, isError } = useGetPosts()
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost()
   const localPosts = usePostStore((state) => state.localPosts)
-  const removePost = usePostStore((state) => state.removePost)
+  const hiddenPostIds = usePostStore((state) => state.hiddenPostIds)
+  const removeLocalPost = usePostStore((state) => state.removeLocalPost)
+  const hidePost = usePostStore((state) => state.hidePost)
 
   const handleDelete = (id: number) => {
     deletePost(id, {
       onSuccess: () => {
-        removePost(id)
+        hidePost(id)
+        removeLocalPost(id)
         toast.success(t('posts.deleteSuccess', { id }))
       },
       onError: () => toast.error(t('posts.deleteError')),
     })
   }
 
-  const displayPosts = React.useMemo(
-    () => [...localPosts, ...(posts ?? [])],
-    [localPosts, posts]
-  )
+  const displayPosts = React.useMemo(() => {
+    const hidden = new Set(hiddenPostIds)
+    const localIds = new Set(localPosts.map((p) => p.id))
+
+    const locals = localPosts.filter((p) => !hidden.has(p.id))
+    const remotes = (posts ?? []).filter((p) => !hidden.has(p.id) && !localIds.has(p.id))
+
+    return [...locals, ...remotes]
+  }, [posts, localPosts, hiddenPostIds])
 
   return (
     <div className="space-y-6">

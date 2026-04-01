@@ -10,6 +10,7 @@ import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
+import { usePostStore } from '@/store/usePostStore'
 
 
 const PostDetailPage = () => {
@@ -18,12 +19,29 @@ const PostDetailPage = () => {
   const id = Number(postId)
   const navigate = useNavigate()
 
+  const localPosts = usePostStore((state) => state.localPosts)
+  const localPost = localPosts.find((p) => p.id === id)
+  const upsertPost = usePostStore((state) => state.upsertPost)
+
   const { data: post, isLoading, isError } = useGetPost(id)
   const { mutate: updatePost, isPending } = useUpdatePost(id)
 
   const handleSubmit = (values: PostFormValues) => {
     updatePost(values, {
-      onSuccess: () => toast.success(t('posts.updateSuccess')),
+      onSuccess: (updated) => {
+        const base = post ?? localPost
+        const { id: _baseId, ...baseRest } = base ?? { id, userId: 1, title: '', body: '' }
+        const { id: _updatedId, ...updatedRest } = updated
+        upsertPost({
+          ...baseRest,
+          ...updatedRest,
+          ...values,
+          id,
+          userId: base?.userId ?? 1,
+        })
+        toast.success(t('posts.updateSuccess'))
+        navigate({ to: '/posts' })
+      },
       onError: () => toast.error(t('posts.updateError')),
     })
   }
