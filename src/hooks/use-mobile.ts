@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
-const MOBILE_BREAKPOINT = 768
+// Treat screens < 991px as "mobile" for drawer sidebar behavior
+const MOBILE_BREAKPOINT = 1100
 
 export const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)

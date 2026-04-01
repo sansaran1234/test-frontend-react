@@ -1,6 +1,6 @@
 import { FileText, MessageSquare, Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { Link } from "@tanstack/react-router"
+import { Link, useRouterState } from "@tanstack/react-router"
 
 import {
   Sidebar,
@@ -16,6 +16,10 @@ import {
 
 export const AppSidebar = () => {
   const { t } = useTranslation()
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const isPostsActive = pathname.startsWith("/posts")
+  const isUsersActive = pathname.startsWith("/users")
+  const isCommentsActive = pathname.startsWith("/comments")
 
   return (
     <Sidebar>
@@ -33,6 +37,7 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip={t("root.navPosts")}
+                  isActive={isPostsActive}
                   render={
                     <Link to="/posts" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
                       <FileText />
@@ -44,6 +49,7 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip={t("root.navUsers")}
+                  isActive={isUsersActive}
                   render={
                     <Link to="/users" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
                       <Users />
@@ -55,6 +61,7 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip={t("root.navComments")}
+                  isActive={isCommentsActive}
                   render={
                     <Link to="/comments" activeProps={{ className: "font-medium text-sidebar-accent-foreground" }}>
                       <MessageSquare />
