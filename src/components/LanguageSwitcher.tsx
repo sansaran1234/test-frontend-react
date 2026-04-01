@@ -7,11 +7,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Globe } from 'lucide-react'
+import { setCookie } from '@/lib/cookies'
+
+const LANGUAGE_COOKIE_NAME = 'app_lang'
 
 export const LanguageSwitcher = () => {
   const { i18n } = useTranslation()
 
   const handleLanguageChange = (lang: string) => {
+    setCookie(LANGUAGE_COOKIE_NAME, lang)
     i18n.changeLanguage(lang)
   }
 

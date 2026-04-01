@@ -1,5 +1,9 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import { getCookie } from '@/lib/cookies'
+
+const LANGUAGE_COOKIE_NAME = 'app_lang'
+const SUPPORTED_LANGUAGES = new Set(['th', 'en'])
 
 const resources = {
   en: {
@@ -398,7 +402,10 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'th', // default to Thai
+    lng: (() => {
+      const cookieLang = getCookie(LANGUAGE_COOKIE_NAME)
+      return cookieLang && SUPPORTED_LANGUAGES.has(cookieLang) ? cookieLang : 'th'
+    })(), // default to Thai
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false
