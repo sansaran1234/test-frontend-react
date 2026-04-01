@@ -32,6 +32,7 @@ const CommentDetailPage = () => {
         const { id: _updatedId, ...updatedRest } = updated
         upsertComment({ ...baseRest, ...updatedRest, ...values, id })
         toast.success(t('comments.updateSuccess', 'Comment updated successfully'))
+        navigate({ to: '/comments' })
       },
       onError: () =>
         toast.error(t('comments.updateError', 'Failed to update comment. Please try again.')),

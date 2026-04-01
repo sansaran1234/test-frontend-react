@@ -32,12 +32,7 @@ const createUserSchema = (t: any) =>
       .string()
       .min(1, t('users.validation.emailRequired', 'กรุณากรอกอีเมล'))
       .email(t('users.validation.emailFormat', 'รูปแบบอีเมลไม่ถูกต้อง')),
-    phone: z
-      .string()
-      .optional()
-      .refine((val) => val === undefined || val === '' || /^\d+$/.test(val), {
-        message: t('users.validation.phoneNumbersOnly', 'เบอร์โทรต้องเป็นตัวเลขเท่านั้น'),
-      }),
+    phone: z.string().optional(),
     website: z.string().optional(),
   })
 

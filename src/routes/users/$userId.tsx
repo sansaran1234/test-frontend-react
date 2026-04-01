@@ -32,6 +32,7 @@ const UserDetailPage = () => {
         const { id: _updatedId, ...updatedRest } = updated
         upsertUser({ ...baseRest, ...updatedRest, ...values, id })
         toast.success(t('users.updateSuccess', 'User updated successfully'))
+        navigate({ to: '/users' })
       },
       onError: () => toast.error(t('users.updateError', 'Failed to update user. Please try again.')),
     })
