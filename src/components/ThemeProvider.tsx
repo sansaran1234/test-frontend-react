@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react"
+import { getCookie, setCookie } from "@/lib/cookies"
 
 type Theme = "dark" | "light"
 
@@ -21,6 +22,9 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
+const THEME_COOKIE_NAME = "app_theme"
+const SUPPORTED_THEMES = new Set<Theme>(["light", "dark"])
+
 export const ThemeProvider = ({
   children,
   defaultTheme = "light",
@@ -28,7 +32,13 @@ export const ThemeProvider = ({
   ...props
 }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => {
+      const cookieTheme = getCookie(THEME_COOKIE_NAME) as Theme | undefined
+      if (cookieTheme && SUPPORTED_THEMES.has(cookieTheme)) return cookieTheme
+
+      const storedTheme = localStorage.getItem(storageKey) as Theme | null
+      return (storedTheme && SUPPORTED_THEMES.has(storedTheme as Theme) ? storedTheme : null) || defaultTheme
+    }
   )
 
   useEffect(() => {
@@ -42,6 +52,7 @@ export const ThemeProvider = ({
     theme,
     setTheme: (theme: Theme) => {
       localStorage.setItem(storageKey, theme)
+      setCookie(THEME_COOKIE_NAME, theme)
       setTheme(theme)
     },
   }
