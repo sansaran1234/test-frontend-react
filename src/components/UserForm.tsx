@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -57,7 +57,7 @@ export const UserForm = ({
   submitLabel,
 }: UserFormProps) => {
   const { t, i18n } = useTranslation()
-  const userSchema = React.useMemo(() => createUserSchema(t), [i18n.language, t])
+  const userSchema = useMemo(() => createUserSchema(t), [i18n.language, t])
   const effectiveSubmitLabel = submitLabel ?? t('users.save', 'Save')
 
   const {
@@ -76,7 +76,7 @@ export const UserForm = ({
     },
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!defaultValues) return
     reset({
       name: defaultValues.name ?? '',

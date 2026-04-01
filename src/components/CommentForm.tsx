@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -54,7 +54,7 @@ export const CommentForm = ({
   submitLabel,
 }: CommentFormProps) => {
   const { t, i18n } = useTranslation()
-  const commentSchema = React.useMemo(() => createCommentSchema(t), [i18n.language, t])
+  const commentSchema = useMemo(() => createCommentSchema(t), [i18n.language, t])
   const effectiveSubmitLabel = submitLabel ?? t('comments.save', 'Save')
 
   const {
@@ -72,7 +72,7 @@ export const CommentForm = ({
     },
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!defaultValues) return
     reset({
       postId: defaultValues.postId ?? 1,

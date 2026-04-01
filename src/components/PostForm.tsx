@@ -1,5 +1,5 @@
 // src/components/PostForm.tsx
-import * as React from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -45,7 +45,7 @@ export const PostForm = ({
   submitLabel,
 }: PostFormProps) => {
   const { t, i18n } = useTranslation()
-  const postSchema = React.useMemo(() => createPostSchema(t), [i18n.language, t])
+  const postSchema = useMemo(() => createPostSchema(t), [i18n.language, t])
   const effectiveSubmitLabel = submitLabel ?? t('posts.save', 'Save')
 
   const {
@@ -61,8 +61,7 @@ export const PostForm = ({
     },
   })
 
-  // Sync defaultValues when editing (pre-fill from API)
-  React.useEffect(() => {
+  useEffect(() => {
     if (defaultValues?.title !== undefined || defaultValues?.body !== undefined) {
       reset({
         title: defaultValues?.title ?? '',
