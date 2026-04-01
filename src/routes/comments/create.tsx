@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useCreateComment } from '@/hooks/useComments'
-import { CommentForm, type CommentFormValues } from '@/components/CommentForm'
+import { CommentForm, type CommentFormValues } from '@/components/comments/CommentForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { ArrowLeft } from 'lucide-react'
@@ -66,4 +66,3 @@ const CommentCreatePage = () => {
 export const Route = createFileRoute('/comments/create')({
   component: CommentCreatePage,
 })
-

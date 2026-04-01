@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export const UsersLoading = () => {
+export const CommentsLoading = () => {
   return (
     <div className="space-y-3">
       {Array.from({ length: 8 }).map((_, i) => (
@@ -9,4 +9,3 @@ export const UsersLoading = () => {
     </div>
   )
 }
-

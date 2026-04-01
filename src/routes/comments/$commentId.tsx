@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useGetComment, useUpdateComment } from '@/hooks/useComments'
-import { CommentForm, type CommentFormValues } from '@/components/CommentForm'
+import { CommentForm, type CommentFormValues } from '@/components/comments/CommentForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -108,4 +108,3 @@ const CommentDetailPage = () => {
 export const Route = createFileRoute('/comments/$commentId')({
   component: CommentDetailPage,
 })
-

@@ -1,3 +1,4 @@
+// src/components/PostsTable.tsx
 import * as React from 'react'
 import { useState } from 'react'
 import {
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui/table'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { PostsFilter } from '@/components/posts/PostsFilter'
 import {
   Dialog,
   DialogContent,
@@ -27,40 +29,47 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Link } from '@tanstack/react-router'
+import type { Post } from '@/api/posts'
 import { Pencil, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
-import type { User } from '@/api/users'
+import { useGetUsers } from '@/hooks/useUsers'
 import { useDebounce } from '@/hooks/useDebounce'
-import { UsersFilter } from '@/components/UsersFilter'
-import { TablePagination } from '@/components/TablePagination'
+import { TablePagination } from '@/components/shared/TablePagination'
 
-interface UsersTableProps {
-  data: User[]
+interface PostsTableProps {
+  data: Post[]
   onDelete: (id: number) => void
   isDeleting?: boolean
 }
 
-export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
+export const PostsTable = ({ data, onDelete, isDeleting }: PostsTableProps) => {
   const { t } = useTranslation()
+  const { data: users } = useGetUsers()
   const [globalFilterInput, setGlobalFilterInput] = useState('')
   const globalFilter = useDebounce(globalFilterInput, 300)
   const isFiltering = globalFilterInput !== globalFilter
+  const [userFilter, setUserFilter] = useState('all')
   const [deletingId, setDeletingId] = useState<number | null>(null)
-  const [userToDelete, setUserToDelete] = useState<number | null>(null)
+  const [postToDelete, setPostToDelete] = useState<number | null>(null)
 
   const handleConfirmDelete = () => {
-    if (userToDelete !== null) {
-      setDeletingId(userToDelete)
-      onDelete(userToDelete)
-      setUserToDelete(null)
+    if (postToDelete !== null) {
+      setDeletingId(postToDelete)
+      onDelete(postToDelete)
+      setPostToDelete(null)
     }
   }
 
-  const columns = React.useMemo<ColumnDef<User>[]>(() => [
+  const columnFilters = React.useMemo(
+    () => (userFilter === 'all' ? [] : [{ id: 'userId', value: Number(userFilter) }]),
+    [userFilter]
+  )
+
+  const columns = React.useMemo<ColumnDef<Post>[]>(() => [
     {
       id: 'index',
-      header: t('users.index', 'ลำดับ'),
+      header: t('posts.index', 'ลำดับ'),
       cell: ({ row, table }) => {
         const { pageIndex, pageSize } = table.getState().pagination
         const rowIndex = table.getRowModel().rows.indexOf(row)
@@ -74,26 +83,32 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
       },
       size: 60,
       enableGlobalFilter: false,
+      enableColumnFilter: false,
     },
     {
-      accessorKey: 'name',
-      header: t('users.name', 'Name'),
-      cell: ({ row }) => <span className="font-medium text-sm">{row.getValue('name')}</span>,
+      accessorKey: 'userId',
+      header: t('posts.user'),
+      cell: ({ row }) => {
+        const uid = row.getValue('userId') as number
+        const user = users?.find((u: any) => u.id === uid)
+
+        return (
+          <span className="text-sm text-foreground">
+            {user ? user.name : `${t('posts.user')} ${uid}`}
+          </span>
+        )
+      },
+      size: 80,
+      filterFn: 'equals',
     },
     {
-      accessorKey: 'email',
-      header: t('users.email', 'Email'),
-      cell: ({ row }) => <span className="text-sm">{row.getValue('email')}</span>,
-    },
-    {
-      accessorKey: 'phone',
-      header: t('users.phone', 'Phone'),
-      cell: ({ row }) => <span className="text-sm">{(row.getValue('phone') as string) ?? '-'}</span>,
-    },
-    {
-      accessorKey: 'website',
-      header: t('users.website', 'Website'),
-      cell: ({ row }) => <span className="text-sm">{(row.getValue('website') as string) ?? '-'}</span>,
+      accessorKey: 'title',
+      header: t('posts.postTitle'),
+      cell: ({ row }) => (
+        <div className="max-w-[420px]">
+          <p className="truncate font-medium text-sm">{row.getValue('title')}</p>
+        </div>
+      ),
     },
     {
       id: 'actions',
@@ -103,37 +118,40 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
         return (
           <div className="flex items-center gap-2 justify-end">
             <Link
-              to="/users/$userId"
-              params={{ userId: String(id) }}
+              to="/posts/$postId"
+              params={{ postId: String(id) }}
               className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
             >
               <Pencil className="h-3.5 w-3.5 mr-1" />
-              {t('users.edit', 'Edit')}
+              {t('posts.edit')}
             </Link>
             <Button
               variant="destructive"
               size="sm"
               disabled={isDeleting && deletingId === id}
-              onClick={() => setUserToDelete(id)}
+              onClick={() => setPostToDelete(id)}
             >
               <Trash2 className="h-3.5 w-3.5 mr-1" />
-              {isDeleting && deletingId === id ? t('users.deleting', 'Deleting...') : t('users.delete', 'Delete')}
+              {isDeleting && deletingId === id ? t('posts.deleting') : t('posts.delete')}
             </Button>
           </div>
         )
       },
       size: 160,
       enableGlobalFilter: false,
+      enableColumnFilter: false,
     },
-  ], [t, isDeleting, deletingId])
+  ], [t, users, isDeleting, deletingId, onDelete])
 
   const table = useReactTable({
     data,
     columns,
     state: {
       globalFilter,
+      columnFilters,
     },
     onGlobalFilterChange: setGlobalFilterInput,
+    onColumnFiltersChange: () => {},
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -142,12 +160,16 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
 
   return (
     <div className="space-y-4">
-      <UsersFilter
+      {/* Filters */}
+      <PostsFilter
         globalFilter={globalFilterInput}
         setGlobalFilter={(value) => setGlobalFilterInput(value)}
         isFiltering={isFiltering}
+        userFilter={userFilter}
+        setUserFilter={setUserFilter}
       />
 
+      {/* Table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -177,7 +199,7 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                  {t('users.noUsers', 'No users found.')}
+                  {t('posts.noPosts')}
                 </TableCell>
               </TableRow>
             )}
@@ -185,13 +207,13 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
         </Table>
       </div>
 
+      {/* Pagination */}
       <TablePagination
-        info={t('users.pageInfo', {
+        info={t('posts.pageInfo', {
           page: table.getState().pagination.pageIndex + 1,
           pageCount: table.getPageCount(),
           count: table.getFilteredRowModel().rows.length,
           suffix: table.getFilteredRowModel().rows.length !== 1 ? 's' : '',
-          defaultValue: 'Page {{page}} of {{pageCount}} · {{count}} result{{suffix}}',
         })}
         pageIndex={table.getState().pagination.pageIndex}
         pageCount={table.getPageCount()}
@@ -200,33 +222,24 @@ export const UsersTable = ({ data, onDelete, isDeleting }: UsersTableProps) => {
         onPrevious={() => table.previousPage()}
         onNext={() => table.nextPage()}
         onPageIndex={(idx) => table.setPageIndex(idx)}
-        previousLabel={t('users.previous', 'Previous')}
-        nextLabel={t('users.next', 'Next')}
+        previousLabel={t('posts.previous')}
+        nextLabel={t('posts.next')}
       />
 
-      <Dialog open={userToDelete !== null} onOpenChange={(open) => !open && setUserToDelete(null)}>
+      <Dialog open={postToDelete !== null} onOpenChange={(open) => !open && setPostToDelete(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('users.deleteTitle', 'Delete User')}</DialogTitle>
+            <DialogTitle>{t('posts.deleteTitle')}</DialogTitle>
             <DialogDescription>
-              {t('users.deleteConfirm', {
-                id: userToDelete ?? '',
-                defaultValue: 'Are you sure you want to delete user #{{id}}? This action cannot be undone.',
-              })}
+              {t('posts.deleteConfirm', { id: postToDelete })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setUserToDelete(null)}>
-              {t('users.cancel', 'Cancel')}
+            <Button variant="outline" onClick={() => setPostToDelete(null)}>
+              {t('posts.cancel')}
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleConfirmDelete}
-              disabled={userToDelete !== null && isDeleting && deletingId === userToDelete}
-            >
-              {userToDelete !== null && isDeleting && deletingId === userToDelete
-                ? t('users.deleting', 'Deleting...')
-                : t('users.delete', 'Delete')}
+            <Button variant="destructive" onClick={handleConfirmDelete}>
+              {t('posts.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

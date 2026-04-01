@@ -17,4 +17,3 @@ export const FormField = ({ id, label, error, children }: FormFieldProps) => {
     </div>
   )
 }
-

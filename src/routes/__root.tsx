@@ -2,10 +2,10 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { Toaster } from '@/components/ui/sonner'
 import { FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { ModeToggle } from '@/components/ModeToggle'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
+import { ModeToggle } from '@/components/layout/ModeToggle'
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/AppSidebar'
+import { AppSidebar } from '@/components/layout/AppSidebar'
 
 export const Route = createRootRoute({
   component: RootLayout,

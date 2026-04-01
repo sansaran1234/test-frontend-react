@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useCreateUser } from '@/hooks/useUsers'
-import { UserForm, type UserFormValues } from '@/components/UserForm'
+import { UserForm, type UserFormValues } from '@/components/users/UserForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { ArrowLeft } from 'lucide-react'
@@ -56,4 +56,3 @@ const UserCreatePage = () => {
 export const Route = createFileRoute('/users/create')({
   component: UserCreatePage,
 })
-

@@ -1,7 +1,7 @@
 // src/routes/posts/create.tsx
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useCreatePost } from '@/hooks/usePosts'
-import { PostForm, type PostFormValues } from '@/components/PostForm'
+import { PostForm, type PostFormValues } from '@/components/posts/PostForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { ArrowLeft } from 'lucide-react'

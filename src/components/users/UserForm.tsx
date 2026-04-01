@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { FormField } from '@/components/FormField'
+import { FormField } from '@/components/shared/FormField'
 import { useTranslation } from 'react-i18next'
 
 export type UserFormValues = {

@@ -1,7 +1,7 @@
 // src/routes/posts/$postId.tsx
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useGetPost, useUpdatePost } from '@/hooks/usePosts'
-import { PostForm, type PostFormValues } from '@/components/PostForm'
+import { PostForm, type PostFormValues } from '@/components/posts/PostForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
