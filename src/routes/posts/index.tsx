@@ -2,12 +2,13 @@ import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useGetPosts, useDeletePost } from '@/hooks/usePosts'
 import { PostsTable } from '@/components/PostsTable'
-import { PostsHeader } from '@/components/PostsHeader'
+import { PageHeader } from '@/components/PageHeader'
 import { PostsError } from '@/components/PostsError'
 import { PostsLoading } from '@/components/PostsLoading'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { usePostStore } from '@/store/usePostStore'
+import { Plus } from 'lucide-react'
 
 const PostsListPage = () => {
   const { t } = useTranslation()
@@ -33,7 +34,15 @@ const PostsListPage = () => {
 
   return (
     <div className="space-y-6">
-      <PostsHeader />
+      <PageHeader
+        title={t('posts.title')}
+        subtitle={t('posts.subtitle')}
+        action={{
+          to: '/posts/create',
+          icon: <Plus className="h-4 w-4 mr-2" />,
+          label: t('posts.createBtn'),
+        }}
+      />
       {isError ? (
         <PostsError />
       ) : isLoading ? (

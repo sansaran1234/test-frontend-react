@@ -2,12 +2,13 @@ import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useDeleteUser, useGetUsers } from '@/hooks/useUsers'
 import { UsersTable } from '@/components/UsersTable'
-import { UsersHeader } from '@/components/UsersHeader'
+import { PageHeader } from '@/components/PageHeader'
 import { UsersError } from '@/components/UsersError'
 import { UsersLoading } from '@/components/UsersLoading'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useUserStore } from '@/store/useUserStore'
+import { Plus } from 'lucide-react'
 
 const UsersListPage = () => {
   const { t } = useTranslation()
@@ -41,7 +42,15 @@ const UsersListPage = () => {
 
   return (
     <div className="space-y-6">
-      <UsersHeader />
+      <PageHeader
+        title={t('users.title', 'Users')}
+        subtitle={t('users.subtitle', 'Manage and browse all users')}
+        action={{
+          to: '/users/create',
+          icon: <Plus className="h-4 w-4 mr-2" />,
+          label: t('users.createBtn', 'Create User'),
+        }}
+      />
       {isError ? (
         <UsersError />
       ) : isLoading ? (

@@ -2,12 +2,13 @@ import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useDeleteComment, useGetComments } from '@/hooks/useComments'
 import { CommentsTable } from '@/components/CommentsTable'
-import { CommentsHeader } from '@/components/CommentsHeader'
+import { PageHeader } from '@/components/PageHeader'
 import { CommentsError } from '@/components/CommentsError'
 import { CommentsLoading } from '@/components/CommentsLoading'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useCommentStore } from '@/store/useCommentStore'
+import { MessageSquarePlus } from 'lucide-react'
 
 const CommentsListPage = () => {
   const { t } = useTranslation()
@@ -44,7 +45,15 @@ const CommentsListPage = () => {
 
   return (
     <div className="space-y-6">
-      <CommentsHeader />
+      <PageHeader
+        title={t('comments.title', 'Comments')}
+        subtitle={t('comments.subtitle', 'Manage and browse all comments')}
+        action={{
+          to: '/comments/create',
+          icon: <MessageSquarePlus className="h-4 w-4 mr-2" />,
+          label: t('comments.createBtn', 'Create Comment'),
+        }}
+      />
       {isError ? (
         <CommentsError />
       ) : isLoading ? (
@@ -59,4 +68,3 @@ const CommentsListPage = () => {
 export const Route = createFileRoute('/comments/')({
   component: CommentsListPage,
 })
-
